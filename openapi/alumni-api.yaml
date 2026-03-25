@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Alumni Community API
-  version: 1.0.0
+  version: 0.5.0
 
 servers:
   - url: http://localhost:3000
@@ -23,7 +23,7 @@ paths:
   /api/v1/donations:
     post:
       summary: Create donation
-      # Auth: alumni, admin only
+      # Auth: alumni, admin onlyc
       security:
         - bearerAuth: []
       requestBody:
