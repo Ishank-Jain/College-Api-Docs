@@ -1,0 +1,24 @@
+site_name: College Alumni API Documentation
+site_description: Documentation portal for the College Alumni Application APIs
+site_author: Ishank Jain
+docs_dir: docs
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Setup: setup.md
+  - API Overview: api-overview.md
+  - Authentication: authentication.md
+  - Environments: environments.md
+  - Versioning: versioning.md
+  - Architecture: architecture.md
+  - Swagger UI: swagger-ui.md
+  - APIs:
+      - Auth API: apis/auth-api.md
+      - Alumni Profile API: apis/alumni-profile-api.md
+      - Directory API: apis/directory-api.md
+      - Events API: apis/events-api.md
+      - Mentorship API: apis/mentorship-api.md
+      - Alumni Community API: apis/alumni-api.md

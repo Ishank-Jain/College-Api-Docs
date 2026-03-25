@@ -1,0 +1,125 @@
+openapi: 3.0.3
+info:
+  title: Alumni Community API
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+
+  /api/v1/faqs:
+    get:
+      summary: Get FAQs
+      # No auth required
+
+  /api/v1/donations:
+    post:
+      summary: Create donation
+      # Auth: alumni, admin only
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                amount: { type: number }
+                purpose: { type: string }
+                paymentMethod: { type: string }
+      responses:
+        '201': { description: Donation created }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden - alumni/admin only }
+
+  /api/v1/connections/request:
+    post:
+      summary: Send connection request
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                receiverId: { type: string }
+                message: { type: string }
+      responses:
+        '201': { description: Request sent }
+        '401': { description: Unauthorized }
+
+  /api/v1/connections:
+    get:
+      summary: Get my connections
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Connections list }
+        '401': { description: Unauthorized }
+
+  /api/v1/messages:
+    post:
+      summary: Send message (only if connected)
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                receiverId: { type: string }
+                message: { type: string }
+      responses:
+        '201': { description: Message sent }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden - not connected }
+
+  /api/v1/messages/thread/{id}:
+    get:
+      summary: Get message thread
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Thread fetched }
+        '401': { description: Unauthorized }
+        '404': { description: Thread not found }
+
+  /api/v1/jobs:
+    get:
+      summary: Get jobs (all roles)
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Jobs list }
+        '401': { description: Unauthorized }
+
+    post:
+      summary: Post a job (alumni/admin only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                title: { type: string }
+                company: { type: string }
+                location: { type: string }
+                roleType: { type: string }
+                eligibility: { type: string }
+      responses:
+        '201': { description: Job posted }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden - alumni/admin only }

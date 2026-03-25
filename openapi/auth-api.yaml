@@ -1,0 +1,71 @@
+openapi: 3.0.3
+info:
+  title: Authentication API
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+
+  /api/v1/auth/signup:
+    post:
+      summary: Register new user
+      # No auth required
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                fullName:   { type: string }
+                email:      { type: string }
+                password:   { type: string }
+                role:       { type: string, enum: [student, alumni, admin] }
+                batchYear:  { type: integer }
+                department: { type: string }
+      responses:
+        '201': { description: User registered, returns JWT token }
+        '400': { description: Invalid input or email already exists }
+        '500': { description: Server error }
+
+  /api/v1/auth/login:
+    post:
+      summary: Login user
+      # No auth required
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email:    { type: string }
+                password: { type: string }
+      responses:
+        '200': { description: Login successful, returns JWT token }
+        '400': { description: Missing email or password }
+        '401': { description: Invalid credentials }
+        '500': { description: Server error }
+
+  /api/v1/auth/logout:
+    post:
+      summary: Logout current user
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Logout successful }
+        '401': { description: Unauthorized }
+
+  /api/v1/auth/me:
+    get:
+      summary: Get current logged-in user
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Returns current user profile }
+        '401': { description: Unauthorized }
