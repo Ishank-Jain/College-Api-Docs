@@ -1,0 +1,57 @@
+openapi: 3.0.3
+info:
+  title: Directory API
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+
+  /api/v1/directory:
+    get:
+      summary: Get paginated alumni directory
+      security:
+        - bearerAuth: []
+      parameters:
+        - { name: page,  in: query, schema: { type: integer } }
+        - { name: limit, in: query, schema: { type: integer } }
+      responses:
+        '200': { description: Directory fetched }
+        '401': { description: Unauthorized }
+
+  /api/v1/directory/search:
+    get:
+      summary: Search alumni by keyword
+      security:
+        - bearerAuth: []
+      parameters:
+        - { name: keyword, in: query, required: true, schema: { type: string } }
+      responses:
+        '200': { description: Search results fetched }
+        '400': { description: Missing or invalid keyword }
+        '401': { description: Unauthorized }
+
+  /api/v1/directory/filter:
+    get:
+      summary: Filter alumni by fields
+      security:
+        - bearerAuth: []
+      parameters:
+        - { name: company,         in: query, schema: { type: string } }
+        - { name: batchYear,       in: query, schema: { type: integer } }
+        - { name: location,        in: query, schema: { type: string } }
+        - { name: department,      in: query, schema: { type: string } }
+        - { name: skill,           in: query, schema: { type: string } }
+        - { name: willingToMentor, in: query, schema: { type: boolean } }
+      responses:
+        '200': { description: Filtered results fetched }
+        '400': { description: Invalid filter parameters }
+        '401': { description: Unauthorized }

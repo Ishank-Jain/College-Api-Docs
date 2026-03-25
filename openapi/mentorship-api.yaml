@@ -1,0 +1,71 @@
+openapi: 3.0.3
+info:
+  title: Mentorship API
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+
+  /api/v1/mentors:
+    get:
+      summary: Get available mentors
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Mentor list fetched }
+        '401': { description: Unauthorized }
+
+  /api/v1/mentorship/request:
+    post:
+      summary: Create mentorship request (students only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                mentorId: { type: string }
+                topic:    { type: string }
+                message:  { type: string }
+      responses:
+        '201': { description: Request submitted }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden - students only }
+
+  /api/v1/mentorship/requests:
+    get:
+      summary: Get mentorship requests (alumni sees own, admin sees all)
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Requests fetched }
+        '401': { description: Unauthorized }
+
+  /api/v1/mentorship/requests/{id}:
+    patch:
+      summary: Accept or reject a mentorship request (alumni only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                status: { type: string, enum: [accepted, rejected] }
+      responses:
+        '200': { description: Request updated }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden - assigned alumni only }
+        '404': { description: Request not found }
